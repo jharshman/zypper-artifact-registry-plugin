@@ -1,5 +1,7 @@
 # Zypper Artifact Registry Plugin
 
+[![build result](https://build.opensuse.org/projects/home:josh.harshman/packages/zypper-artifact-registry-plugin/badge.svg?type=default)](https://build.opensuse.org/package/show/home:josh.harshman/zypper-artifact-registry-plugin)
+
 Loosely inspired by the [artifact-registry-yum-plugin](https://github.com/GoogleCloudPlatform/artifact-registry-yum-plugin/tree/main).
 Allows Zypper to use GCP's Artifact Registry RPM Repositories.
 
