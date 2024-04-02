@@ -1,0 +1,50 @@
+#!/usr/bin/python3
+
+#
+# How it works:
+# Zypper sees a url of the format "plugin:pluginName?param=arg&param=arg" and attempts to run
+# a script by the name of "pluginName". For example:
+#
+# plugin:gcp-ar?url=https://us-yum.pkg.dev/projects/PROJECT_ID/REPO_NAME?token=SERVICE_ACCOUNT.json
+#
+# The SA token is stored under /etc/zypp/credentials.d/
+#
+
+# requires zypp_plugin and google-api-python-client
+
+import os.path
+import google.auth
+import google.auth.transport.requests
+from google.oauth2 import service_account
+from zypp_plugin import Plugin
+
+CRED_PATH = "/etc/zypp/credentials.d/"
+
+class ArtifactRegistryPlugin(Plugin):
+
+    def RESOLVEURL(self, headers, body):
+        if 'url' not in headers:
+            self.answer("ERROR", {}, "missing argument url")
+
+        if 'token' not in headers:
+            self.answer("ERROR", {}, "missing argument token")
+
+        url = headers['url']
+        token = headers['token']
+        token_path = os.path.join(CRED_PATH, token)
+        if not os.path.isfile(token_path):
+            self.answer("ERROR", {}, "file not found")
+
+        credentials = service_account.Credentials.from_service_account_file(
+            token_path,
+            scopes=['https://www.googleapis.com/auth/cloud-platform'])
+        auth_req = google.auth.transport.requests.Request()
+        credentials.refresh(auth_req)
+
+        self.auth_headers = {'Authorization': "Bearer " + credentials.token}
+
+        self.answer("RESOLVEDURL", self.auth_headers, url)
+
+
+plugin = ArtifactRegistryPlugin()
+plugin.main()
