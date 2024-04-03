@@ -18,7 +18,10 @@ a plugin for Zypper. This Zypp Plugin allows Zypper to authenticate to GCP's Art
 While both the Yum and DNF Plugins provided by Google leverage an external Go binary to fetch the Bearer token, this Plugin
 accomplishes the same task without having to invoke an external binary.
 
-Requires: libzypp python3 python3-google-api-python-client
+Requires: libzypp
+Requires: python3
+Requires: python3-zypp-plugin
+Requires: python3-google-api-python-client
 
 %prep
 %setup -qn zypper-artifact-registry-plugin
