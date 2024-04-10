@@ -1,4 +1,4 @@
-%define name zypper-artifact-registry-plugin
+%define name libzypp-artifact-registry-plugin
 %define version 0.0.1
 %define release 0
 
